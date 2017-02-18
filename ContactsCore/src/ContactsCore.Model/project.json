@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "ContactsCore.Common": "1.0.0-*",
+    "NETStandard.Library": "1.6.1",
+    "FluentValidation": "6.4.0-rc4",
+    "Newtonsoft.Json": "9.0.1"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
