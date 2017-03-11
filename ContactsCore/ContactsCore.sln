@@ -1,32 +1,27 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26114.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2B1467D1-F865-4DCF-901E-78A5FFB098D4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0C59AA0-7473-4605-89A4-5BE880BA0311}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsCore.Api", "src\ContactsCore.Api\ContactsCore.Api.csproj", "{2851E0E8-355D-4114-A178-50891794E1A5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ContactsCore.Api", "src\ContactsCore.Api\ContactsCore.Api.xproj", "{2851E0E8-355D-4114-A178-50891794E1A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsCore.Data", "src\ContactsCore.Data\ContactsCore.Data.csproj", "{12F1F3D0-262B-43D2-A91F-324A8ACB4527}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ContactsCore.Data", "src\ContactsCore.Data\ContactsCore.Data.xproj", "{12F1F3D0-262B-43D2-A91F-324A8ACB4527}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsCore.Common", "src\ContactsCore.Common\ContactsCore.Common.csproj", "{43CCD0F7-8682-435A-9325-B4C39117B315}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ContactsCore.Common", "src\ContactsCore.Common\ContactsCore.Common.xproj", "{43CCD0F7-8682-435A-9325-B4C39117B315}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ContactsCore.Model", "src\ContactsCore.Model\ContactsCore.Model.xproj", "{D0B3D49B-5124-4D9F-871D-877CC34288B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsCore.Model", "src\ContactsCore.Model\ContactsCore.Model.csproj", "{D0B3D49B-5124-4D9F-871D-877CC34288B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{ED96A001-1B79-43A1-A843-D5E7FE346DFD}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ContactsCore.Model.Tests", "test\ContactsCore.Model.Tests\ContactsCore.Model.Tests.xproj", "{D818E5E6-7426-4A7D-8946-DFB4A4A2E1C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsCore.Model.Tests", "test\ContactsCore.Model.Tests\ContactsCore.Model.Tests.csproj", "{D818E5E6-7426-4A7D-8946-DFB4A4A2E1C7}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ContactsCore.Api.Integration", "test\ContactsCore.Api.Integration\ContactsCore.Api.Integration.xproj", "{F3B9BF70-B984-4A65-9F00-22D67193FD45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsCore.Api.Integration", "test\ContactsCore.Api.Integration\ContactsCore.Api.Integration.csproj", "{F3B9BF70-B984-4A65-9F00-22D67193FD45}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ContactsCore.Business", "src\ContactsCore.Business\ContactsCore.Business.xproj", "{2DA0900F-51C9-4365-A7D1-37CA9F3C15B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsCore.Business", "src\ContactsCore.Business\ContactsCore.Business.csproj", "{2DA0900F-51C9-4365-A7D1-37CA9F3C15B9}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ContactsCore.Business.Tests", "test\ContactsCore.Business.Tests\ContactsCore.Business.Tests.xproj", "{290879F7-9564-4EE8-9806-9076857017D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsCore.Business.Tests", "test\ContactsCore.Business.Tests\ContactsCore.Business.Tests.csproj", "{290879F7-9564-4EE8-9806-9076857017D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
