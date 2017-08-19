@@ -21,12 +21,12 @@ namespace ContactsCore.Api.Controllers
         public ContactDetailsController(ILogger<ContactDetailsController> logger,
             PagingHeaderHelper pagingHeaderHelper,
             ContactDetailsManager manager)
-        {            
+        {
             _logger = logger;
             _pagingHeaderHelper = pagingHeaderHelper;
-            _manager = manager;      
+            _manager = manager;
         }
-       
+
         [HttpGet("{contactUid}")]
         public async Task<IActionResult> Get(Guid contactUid, [FromQuery]int pageNumber = 1, [FromQuery]int pageSize = 20)
         {
@@ -52,16 +52,19 @@ namespace ContactsCore.Api.Controllers
             var result = await _manager.Get(pageNumber, pageSize);
             switch (result.ResultStatus)
             {
-                case Common.Enums.ManagerResponseResult.Success:                 
+                case Common.Enums.ManagerResponseResult.Success:
                     _logger.LogInformation("Get: End (200)");
                     _pagingHeaderHelper.AddHeaders(Response, result.PageMeta);
                     return Ok(result.Result);
+                case Common.Enums.ManagerResponseResult.NotFound:
+                    _logger.LogWarning("Get: End (404)");
+                    return NotFound();
                 default:
                     _logger.LogWarning("Get: End (400 - Error)");
                     return BadRequest(result.ErrorMessage ?? "An error occurred");
             }
         }
-        
+
         [HttpGet("{contactUid}/{uid}")]
         public async Task<IActionResult> GetByUid(Guid contactUid, Guid uid)
         {
@@ -92,7 +95,7 @@ namespace ContactsCore.Api.Controllers
                     _logger.LogWarning("GetByUid: End (400 - Error)");
                     return BadRequest(result.ErrorMessage ?? "An error occurred");
             }
-        }        
+        }
 
         [HttpPost("{contactUid}")]
         public async Task<IActionResult> Post(Guid contactUid, [FromBody]Model.Models.ContactDetail model)

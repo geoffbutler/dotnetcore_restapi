@@ -41,7 +41,7 @@ namespace ContactsCore.Business.Managers
         private IQueryable<Data.Dao.Contact> ParentQuery(Guid contactUid) =>
             _unitOfWork.Query<Data.Dao.Contact>()
                 .Where(o => o.Uid == contactUid);
-            
+
         private async Task<long?> TryGetParentId(Guid contactUid) =>
             await ParentQuery(contactUid)
                 .Select(o => (long?)o.Id)
@@ -52,12 +52,35 @@ namespace ContactsCore.Business.Managers
         {
             _logger.LogInformation("Get: Begin");
 
+            var result = new ManagerResponse<ContactDetail>
+            {
+                ResultStatus = Common.Enums.ManagerResponseResult.Success,
+                Result = new List<ContactDetail>(),
+                PageMeta = new PagingMetadata
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                }
+            };
+
+            var contactId = await TryGetParentId(ContactUid);
+            if (contactId == null)
+            {
+                _logger.LogWarning("Get: End (NotFound)");
+                result.ResultStatus = Common.Enums.ManagerResponseResult.NotFound;
+                return result;
+            }
+
+
             var totalCount = await _unitOfWork.Query<Data.Dao.ContactDetail>()
+                .Where(o => o.ContactId == contactId)
                 .LongCountAsync();
+            result.PageMeta.Total = totalCount;
 
             var skip = (pageNumber - 1) * pageSize;
             var daos = await _unitOfWork.Query<Data.Dao.ContactDetail>()
                 .AsNoTracking()
+                .Where(o => o.ContactId == contactId)
                 .OrderBy(o => o.Id)
                 .Skip(skip)
                 .Take(pageSize)
@@ -68,17 +91,6 @@ namespace ContactsCore.Business.Managers
             //foreach (var m in models)
             //    m.ContactUid = contactUid;
 
-            var result = new ManagerResponse<ContactDetail>
-            {
-                ResultStatus = Common.Enums.ManagerResponseResult.Success,
-                Result = new List<ContactDetail>(),
-                PageMeta = new PagingMetadata
-                {
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    Total = totalCount
-                }
-            };
             result.Result.AddRange(models);
 
             _logger.LogInformation("Get: End");
@@ -154,7 +166,7 @@ namespace ContactsCore.Business.Managers
                     case Common.Enums.DbUpdateExceptionType.UniqueKeyConstraintViolation:
                         result.ResultStatus = Common.Enums.ManagerResponseResult.UniqueKeyViolation;
                         result.ErrorMessage = "Unique key constraint violation";
-                        return result;                    
+                        return result;
                     default:
                         result.ResultStatus = Common.Enums.ManagerResponseResult.UnknownError;
                         result.ErrorMessage = "Unknown database error";
@@ -165,7 +177,7 @@ namespace ContactsCore.Business.Managers
             var createdModel = _mapper.Map<Data.Dao.ContactDetail, ContactDetail>(dao);
             //createdModel.ContactUid = contactUid;
             result.Result.Add(createdModel);
-            
+
             _logger.LogInformation("Create: End");
             return result;
         }
@@ -217,7 +229,7 @@ namespace ContactsCore.Business.Managers
             result.Result.Add(createdOrUpdatedModel);
 
             if (created)
-            {                
+            {
                 _logger.LogInformation("Put: End (Created)");
                 result.ResultStatus = Common.Enums.ManagerResponseResult.Created;
                 return result;
@@ -267,18 +279,19 @@ namespace ContactsCore.Business.Managers
 
         // Public implementation of Dispose pattern callable by consumers.
         public void Dispose()
-        { 
+        {
             Dispose(true);
-            GC.SuppressFinalize(this);           
+            GC.SuppressFinalize(this);
         }
 
         // Protected implementation of Dispose pattern.
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
-                return; 
+                return;
 
-            if (disposing) {
+            if (disposing)
+            {
                 // Free any other managed objects here.
                 if (_unitOfWork != null)
                 {
