@@ -27,29 +27,29 @@ namespace ContactsCore.Business.Managers
             _mapper = mapper;
             _dbExceptionHelper = dbExceptionHelper;
             _unitOfWork = unitOfWork;
-        }        
+        }
 
         private IQueryable<Data.Dao.ContactWithDetailsQueryResult> BaseQuery(Guid? contactUid = null) =>
             (
                 from c in _unitOfWork.Query<Data.Dao.Contact>()
+                join d in _unitOfWork.Query<Data.Dao.ContactDetail>() on c.Id equals d.ContactId into cd
                 where (contactUid == null || c.Uid == contactUid)
+                orderby c.Id
                 select new Data.Dao.ContactWithDetailsQueryResult
                 {
                     Contact = c,
-                    Details = c.Details.Where(o => !o.IsDeleted).ToList() // TODO
+                    Details = cd.ToList()
                 }
-
             ).AsNoTracking();
 
         public async Task<ManagerResponse<Model.ViewModels.ContactWithDetailsViewModel>> Get(int pageNumber, int pageSize)
         {
             _logger.LogInformation("Get: Begin");
-            
+
             var totalCount = await BaseQuery().LongCountAsync();
 
             var skip = (pageNumber - 1) * pageSize;
             var daos = await BaseQuery()
-                .OrderBy(o => o.Contact.Id)
                 .Skip(skip)
                 .Take(pageSize)
                 .ToListAsync();
