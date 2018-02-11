@@ -71,8 +71,8 @@ namespace ContactsCore.Model.Tests.Validators
         }
 
         [Theory]
-        [InlineData(-1)] // invalid
-        [InlineData(99)] // invalid                
+        [InlineData((Common.Enums.ContactDetailType)(-1))] // invalid
+        [InlineData((Common.Enums.ContactDetailType)99)] // invalid                
         public async Task ReturnErrorsForInvalidType(Common.Enums.ContactDetailType value)
         {
             // arrange

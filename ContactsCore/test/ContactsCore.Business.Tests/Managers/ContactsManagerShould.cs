@@ -13,17 +13,24 @@ using System.Collections.Generic;
 using ContactsCore.Common.Enums;
 using ContactsCore.Data.Dao;
 using System.Linq;
+using AutoMapper;
 
 namespace ContactsCore.Business.Tests.Managers
 {
     public class ContactsManagerShould : IDisposable
     {
+        private static IConfigurationProvider MapperProvider;
+
         private readonly Mock<ILogger<ContactsManager>> _fakeLogger;
         private readonly ContactsContext _db;
         private readonly List<Contact> _expectedData;
 
-        private readonly ContactsManager _target;
-                
+        private readonly ContactsManager _target;        
+
+        static ContactsManagerShould()
+        {
+            MapperProvider = MapperConfig.Init();
+        }
 
         public ContactsManagerShould()
         {
@@ -35,7 +42,7 @@ namespace ContactsCore.Business.Tests.Managers
             _db = new ContactsContext(options);
             var unitOfWork = new ContactsUnitOfWork(_db);
 
-            var mapper = MapperConfig.Init().CreateMapper();
+            var mapper = MapperProvider.CreateMapper();
             var fakeDbExceptionHelper = new Mock<IDbExceptionHelper>();
             _target = new ContactsManager(_fakeLogger.Object, mapper, fakeDbExceptionHelper.Object, unitOfWork);
 
@@ -80,7 +87,7 @@ namespace ContactsCore.Business.Tests.Managers
             // assert
             result.Should().NotBeNull();
             result.ResultStatus.Should().Be(ManagerResponseResult.Success);
-            result.Result.ShouldBeEquivalentTo(expectedResults);
+            result.Result.Should().BeEquivalentTo(expectedResults);
 
             result.PageMeta.Should().NotBeNull();
             result.PageMeta.PageNumber.Should().Be(expectedPageNumber);
@@ -109,7 +116,7 @@ namespace ContactsCore.Business.Tests.Managers
             // assert
             result.Should().NotBeNull();
             result.ResultStatus.Should().Be(ManagerResponseResult.Success);
-            result.Result.ShouldBeEquivalentTo(expectedResults);
+            result.Result.Should().BeEquivalentTo(expectedResults);
 
             result.PageMeta.Should().NotBeNull();
             result.PageMeta.PageNumber.Should().Be(expectedPageNumber);
@@ -135,7 +142,7 @@ namespace ContactsCore.Business.Tests.Managers
             // assert
             result.Should().NotBeNull();
             result.ResultStatus.Should().Be(ManagerResponseResult.Success);
-            result.Result.ShouldBeEquivalentTo(expectedResults);
+            result.Result.Should().BeEquivalentTo(expectedResults);
 
             result.PageMeta.Should().NotBeNull();
             result.PageMeta.PageNumber.Should().Be(expectedPageNumber);
@@ -161,7 +168,7 @@ namespace ContactsCore.Business.Tests.Managers
             // assert
             result.Should().NotBeNull();
             result.ResultStatus.Should().Be(ManagerResponseResult.Success);
-            result.Result.ShouldBeEquivalentTo(expectedResults);
+            result.Result.Should().BeEquivalentTo(expectedResults);
 
             result.PageMeta.Should().NotBeNull();
             result.PageMeta.PageNumber.Should().Be(expectedPageNumber);
@@ -187,7 +194,7 @@ namespace ContactsCore.Business.Tests.Managers
             // assert
             result.Should().NotBeNull();
             result.ResultStatus.Should().Be(ManagerResponseResult.Success);
-            result.Result.ShouldBeEquivalentTo(expectedResults);
+            result.Result.Should().BeEquivalentTo(expectedResults);
 
             result.PageMeta.Should().BeNull();
 

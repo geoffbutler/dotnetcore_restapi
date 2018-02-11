@@ -56,7 +56,7 @@ namespace ContactsCore.Api.Integration
             var responseModel = JsonConvert.DeserializeObject<TModel>(responseContent);
             responseModel.Should().NotBeNull();
 
-            responseModel.ShouldBeEquivalentTo(model);
+            responseModel.Should().BeEquivalentTo(model);
             return responseModel;
         }
 
@@ -80,7 +80,7 @@ namespace ContactsCore.Api.Integration
             var responseModel = JsonConvert.DeserializeObject<TInputModel>(responseContent);
             responseModel.Should().NotBeNull();
 
-            responseModel.ShouldBeEquivalentTo(model);
+            responseModel.Should().BeEquivalentTo(model);
             return responseModel;
         }
 
@@ -125,7 +125,7 @@ namespace ContactsCore.Api.Integration
 
                 // verify
                 var responseModel = await DeserializeResponse<TModel>(response);
-                responseModel.ShouldBeEquivalentTo(createdModel);
+                responseModel.Should().BeEquivalentTo(createdModel);
             }
         }
 
@@ -147,7 +147,7 @@ namespace ContactsCore.Api.Integration
                 responseModels = responseModels
                     .Where(o => o.Uid == createdModel1.Uid || o.Uid == createdModel2.Uid)
                     .ToList();
-                responseModels.ShouldBeEquivalentTo(createdModels);
+                responseModels.Should().BeEquivalentTo(createdModels);
             }
         }
 
@@ -170,7 +170,7 @@ namespace ContactsCore.Api.Integration
 
                 // verify
                 var getResponseModel = await DeserializeResponse<TModel>(getResponse);
-                getResponseModel.ShouldBeEquivalentTo(updatedModel);
+                getResponseModel.Should().BeEquivalentTo(updatedModel);
             }
         }
 
