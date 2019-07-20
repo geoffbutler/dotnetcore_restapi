@@ -19,14 +19,20 @@ namespace ContactsCore.Data
         {
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    string contactsConnString = _config["ConnectionStrings:Contacts"];
-        //    optionsBuilder.UseNpgsql(contactsConnString, options =>
-        //    {
-        //        options.MigrationsAssembly("ContactsCore.Data");
-        //    });            
-        //}
+        // TODO: ef migrations used to bootstap using Api Startup - so previously this 
+        //  override was not required - also means we can't inject IConfigurationRoot :(
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+           if (optionsBuilder.IsConfigured)
+                return; // already configured by API startup (not running migrations)
+
+           //string contactsConnString = _config["ConnectionStrings:Contacts"];
+           string contactsConnString = "Host=localhost;Database=contacts;Username=postgres;Password=sql";
+           optionsBuilder.UseNpgsql(contactsConnString, options =>
+           {
+               options.MigrationsAssembly("ContactsCore.Data");
+           });
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -31,6 +31,13 @@ namespace ContactsCore.Api
             // common
             services.AddSingleton(Configuration);
 
+            // logging
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+                loggingBuilder.AddConsole();
+                loggingBuilder.AddDebug();
+            });
 
             // data
             services.AddSingleton<Data.Helpers.IDbExceptionHelper, Data.Helpers.NpgSqlExceptionHelper>();
@@ -65,12 +72,8 @@ namespace ContactsCore.Api
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining(typeof(Model.Validators.ContactValidator)));
         }
         
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug(LogLevel.Debug);
-            //loggerFactory.AddDebug((x, y) => x == "Micro1soft.Data.Entity.Query.QueryContextFactory");
-
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
