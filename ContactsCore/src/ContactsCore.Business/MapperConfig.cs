@@ -6,7 +6,7 @@ namespace ContactsCore.Business
     {
         public static IConfigurationProvider Init()
         {
-            Mapper.Initialize(config =>
+            var mapperConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<Data.Dao.ContactWithDetailsQueryResult, Model.ViewModels.ContactWithDetailsViewModel>()
                     .ForMember(src => src.ContactDetails, opt => opt.MapFrom(o => o.Details))
@@ -18,24 +18,23 @@ namespace ContactsCore.Business
                     });
 
                 config.CreateMap<Data.Dao.Contact, Model.Models.Contact>()
-                    .ForSourceMember(src => src.Id, opt => opt.Ignore())
-                    .ForSourceMember(src => src.Created, opt => opt.Ignore())
-                    .ForSourceMember(src => src.Modified, opt => opt.Ignore())
-                    .ForSourceMember(src => src.IsDeleted, opt => opt.Ignore())
-                    .ForSourceMember(src => src.Details, opt => opt.Ignore())
+                    .ForSourceMember(src => src.Id, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.Created, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.Modified, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.IsDeleted, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.Details, opt => opt.DoNotValidate())
                     .ReverseMap();
 
                 config.CreateMap<Data.Dao.ContactDetail, Model.Models.ContactDetail>()
-                    .ForSourceMember(src => src.Id, opt => opt.Ignore())
-                    .ForSourceMember(src => src.Created, opt => opt.Ignore())
-                    .ForSourceMember(src => src.Modified, opt => opt.Ignore())
-                    .ForSourceMember(src => src.IsDeleted, opt => opt.Ignore())
-                    .ForSourceMember(src => src.Contact, opt => opt.Ignore())
-                    .ForSourceMember(src => src.ContactId, opt => opt.Ignore())
+                    .ForSourceMember(src => src.Id, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.Created, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.Modified, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.IsDeleted, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.Contact, opt => opt.DoNotValidate())
+                    .ForSourceMember(src => src.ContactId, opt => opt.DoNotValidate())
                     .ReverseMap();                
             });
-
-            return Mapper.Configuration;            
+            return mapperConfig;
         }
     }
 }
