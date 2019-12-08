@@ -51,7 +51,7 @@ namespace ContactsCore.Data.Dao
                 .Property("Modified")
                 .HasDefaultValueSql("(now() at time zone 'utc')")
                 .ValueGeneratedOnAddOrUpdate()
-                .Metadata.AfterSaveBehavior = Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Save; // allow updating value in SaveChanges()
+                .Metadata.SetAfterSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Save); // allow updating value in SaveChanges()
 
 
             builder.Entity(GetType()) // Deleted: DEFAULT

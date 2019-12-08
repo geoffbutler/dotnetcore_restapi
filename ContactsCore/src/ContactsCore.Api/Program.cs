@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace ContactsCore.Api
 {
@@ -7,12 +8,14 @@ namespace ContactsCore.Api
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
+            var host = Host.CreateDefaultBuilder(args)
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .ConfigureWebHostDefaults(c =>
+                    {
+                        c.UseIISIntegration()
+                            .UseStartup<Startup>();
+                    })
+                    .Build();
 
             host.Run();
         }

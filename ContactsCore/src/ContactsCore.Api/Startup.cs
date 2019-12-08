@@ -9,12 +9,14 @@ using ContactsCore.Api.Helpers;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ContactsCore.Business;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 
 namespace ContactsCore.Api
 {
     public class Startup
     {        
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -28,7 +30,7 @@ namespace ContactsCore.Api
         
         public void ConfigureServices(IServiceCollection services)
         {
-            // common
+            // common            
             services.AddSingleton(Configuration);
 
             // logging
@@ -66,13 +68,13 @@ namespace ContactsCore.Api
             services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
             // api
-            services.AddCors();
-
-            services.AddMvc()
+            services.AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining(typeof(Model.Validators.ContactValidator)));
+            services.AddCors();
         }
         
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {            
             if (env.IsDevelopment())
             {
@@ -82,15 +84,19 @@ namespace ContactsCore.Api
             app.UseCors(builder =>
             {
                 builder.WithOrigins(
-                    "http://localhost:3000", 
-                    "http://localhost:4000", 
-                    "http://localhost:4500"
+                    "http://localhost:30000",
+                    "http://localhost:40000",
+                    "http://localhost:45000"
                 )
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             });
 
-            app.UseMvc();            
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
         }
     }
 }
